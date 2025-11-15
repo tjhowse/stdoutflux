@@ -21,6 +21,17 @@ You can set the Miniflux URL, API token, line length, and whether printed articl
     STDOUTFLUX_LINE_LENGTH
     STDOUTFLUX_MARK_READ
 
+    $ stdoutflux -help
+    Usage of stdoutflux:
+        -linelength int
+                Maximum line length for content wrapping (default 32)
+        -markread
+                Mark entries as read after printing (default false)
+        -token string
+                API token for Miniflux
+        -url string
+                Miniflux instance URL
+
 Theoretically you could run this in a cronjob, or something.
 
 ## Installation
