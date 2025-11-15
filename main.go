@@ -107,8 +107,7 @@ func main() {
 	client := miniflux.NewClient(cfg.MinifluxURL, cfg.APIToken)
 
 	// Fetch unread entries
-	// entries, err := client.Entries(&miniflux.Filter{Status: miniflux.EntryStatusUnread})
-	entries, err := client.Entries(&miniflux.Filter{Limit: 10})
+	entries, err := client.Entries(&miniflux.Filter{Status: miniflux.EntryStatusUnread})
 	if err != nil {
 		fmt.Println(err)
 		return

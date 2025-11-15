@@ -6,7 +6,7 @@ It's quite dumb. Much of it was written by copilot. I don't suggest you use it.
 
 I (don't) use it like this:
 
-    stdoutflux | pv --rate-limit 32 | receipt
+    stdoutflux -markread | pv --rate-limit 32 | receipt
 
 Where `pv` is [PipeViewer](https://www.ivarch.com/programs/pv.shtml) and `receipt` is a bash script that sends each line to my MQTT broker to be printed by a thermal receipt printer running esphome.
 
@@ -26,6 +26,8 @@ Theoretically you could run this in a cronjob, or something.
 ## Installation
 
 I'm not sure why you'd want to do this, but...
+
+Download an install [Go](https://go.dev/doc/install). Add the `go/bin` directories to your `$PATH` as required. Then:
 
     go install github.com/tjhowse/stdoutflux
 
