@@ -86,7 +86,7 @@ func main() {
 	minifluxURL := flag.String("url", "", "Miniflux instance URL")
 	apiToken := flag.String("token", "", "API token for Miniflux")
 	lineLength := flag.Int("linelength", 32, "Maximum line length for content wrapping")
-	markRead := flag.Bool("markread", false, "Mark entries as read after fetching")
+	markRead := flag.Bool("markread", false, "Mark entries as read after fetching (default false)")
 	flag.Parse()
 
 	// Make CLI flags override env vars if provided
