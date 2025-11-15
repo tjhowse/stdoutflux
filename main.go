@@ -19,19 +19,6 @@ type config struct {
 	MarkRead    bool   `env:"STDOUTFLUX_MARK_READ" envDefault:"false"`
 }
 
-func trimWhitespace(s string) string {
-	start := 0
-	end := len(s)
-
-	for start < end && (s[start] == ' ' || s[start] == '\t') {
-		start++
-	}
-	for end > start && (s[end-1] == ' ' || s[end-1] == '\t') {
-		end--
-	}
-	return s[start:end]
-}
-
 func splitLines(s string) []string {
 	lines := []string{}
 	currentLine := ""
@@ -61,8 +48,9 @@ func lineFilter(s string) bool {
 func formatForThermalPrinter(s string, lineLength int) string {
 	// Filter out lines that are only whitespace
 	var cleaned []string
-	for _, line := range splitLines(s) {
-		if len(trimWhitespace(line)) == 0 {
+	for _, line := range strings.Split(s, "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
 			continue
 		}
 		if !lineFilter(line) {
@@ -75,7 +63,7 @@ func formatForThermalPrinter(s string, lineLength int) string {
 	for _, line := range cleaned {
 		// Word-wrap without splitting words, respecting rune widths
 		wrapped := wordwrap.String(line, lineLength)
-		outLines = append(outLines, splitLines(wrapped)...)
+		outLines = append(outLines, wrapped)
 	}
 
 	if len(outLines) == 0 {
@@ -119,7 +107,8 @@ func main() {
 	client := miniflux.NewClient(cfg.MinifluxURL, cfg.APIToken)
 
 	// Fetch unread entries
-	entries, err := client.Entries(&miniflux.Filter{Status: miniflux.EntryStatusUnread})
+	// entries, err := client.Entries(&miniflux.Filter{Status: miniflux.EntryStatusUnread})
+	entries, err := client.Entries(&miniflux.Filter{Limit: 10})
 	if err != nil {
 		fmt.Println(err)
 		return
