@@ -113,6 +113,10 @@ func main() {
 		return
 	}
 
+	if len(entries.Entries) == 0 {
+		return
+	}
+
 	readEntries := []int64{}
 	for _, entry := range entries.Entries {
 		fmt.Println("===============")
