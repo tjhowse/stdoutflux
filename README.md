@@ -1,8 +1,8 @@
 # stdoutflux
 
-Connects to a miniflux instance, pulls unread entries, formats them for printing on a limited-line display (32 characters by default) and outputs to stdout.
+Connects to a [Miniflux](https://miniflux.app/) instance, pulls unread entries, formats them for printing on a limited-line display (32 characters by default) and outputs to stdout.
 
-It's quite dumb. Much of it was written by copilot.
+It's quite dumb. Much of it was written by copilot. I don't suggest you use it.
 
 I (don't) use it like this:
 
@@ -14,7 +14,7 @@ It does this:
 
 ![A photo of a long ribbon of receipt paper printing from a receipt printer. Slashdot articles are printed on the paper.](images/demo.jpg)
 
-You can set the miniflux URL, API token, line length, and whether printed articles should be marked read (default false) with command-line arguments or environment variables. CLI args take precedence.
+You can set the Miniflux URL, API token, line length, and whether printed articles should be marked read (default false) with command-line arguments or environment variables. CLI args take precedence.
 
     MINIFLUX_URL
     MINIFLUX_API_TOKEN
