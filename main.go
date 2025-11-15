@@ -126,9 +126,11 @@ func main() {
 	}
 
 	if cfg.MarkRead {
-		err = client.UpdateEntries(readEntries, miniflux.EntryStatusRead)
-		if err != nil {
-			fmt.Println("Failed to mark entry as read:", err)
+		if len(readEntries) > 0 {
+			err = client.UpdateEntries(readEntries, miniflux.EntryStatusRead)
+			if err != nil {
+				fmt.Println("Failed to mark entry as read:", err)
+			}
 		}
 	}
 }
