@@ -4,7 +4,7 @@ Connects to a miniflux instance, pulls unread entries, formats them for printing
 
 It's quite dumb. Much of it was written by copilot.
 
-I use it like this:
+I (don't) use it like this:
 
     stdoutflux | pv --rate-limit 32 | receipt
 
