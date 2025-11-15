@@ -21,6 +21,8 @@ You can set the Miniflux URL, API token, line length, and whether printed articl
     STDOUTFLUX_LINE_LENGTH
     STDOUTFLUX_MARK_READ
 
+Or:
+
     $ stdoutflux -help
     Usage of stdoutflux:
         -linelength int
