@@ -75,9 +75,10 @@ func formatForThermalPrinter(s string, lineLength int) string {
 		// Word-wrap without splitting words, respecting rune widths
 		wrapped := wordwrap.String(line, lineLength)
 		// Split the wrapped result back into individual lines
-		for _, wl := range splitLines(wrapped) {
-			outLines = append(outLines, wl)
-		}
+		// for _, wl := range splitLines(wrapped) {
+		// 	outLines = append(outLines, wl)
+		// }
+		outLines = append(outLines, splitLines(wrapped)...)
 	}
 
 	if len(outLines) == 0 {
