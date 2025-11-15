@@ -6,7 +6,7 @@ It's quite dumb. Much of it was written by copilot. I don't suggest you use it.
 
 I (don't) use it like this:
 
-    stdoutflux -markread | pv --rate-limit 32 | receipt
+    stdoutflux -markread | pv --rate-limit 64 | receipt
 
 Where `pv` is [PipeViewer](https://www.ivarch.com/programs/pv.shtml) and `receipt` is a bash script that sends each line to my MQTT broker to be printed by a thermal receipt printer running esphome.
 
