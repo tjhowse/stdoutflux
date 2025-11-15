@@ -42,7 +42,7 @@ I'm not sure why you'd want to do this, but...
 
 Download and install [Go](https://go.dev/doc/install) (It's easy, I promise). Add the `go/bin` directories to your `$PATH` as required. Then:
 
-    go install github.com/tjhowse/stdoutflux
+    go install github.com/tjhowse/stdoutflux@latest
 
 Optionally, to install PipeViewer:
 
