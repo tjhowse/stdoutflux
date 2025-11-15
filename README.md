@@ -36,4 +36,4 @@ Optionally, to install PipeViewer:
 
 ## Known issues
 
-My thermal printer doesn't use a monospaced font, so sometimes it wraps lines of its own accord, splitting words annoyingly. The default of 32 characters is the maximum characters that can fit on a line.
+My thermal printer doesn't use a monospaced font, so sometimes it wraps lines of its own accord, splitting words annoyingly. The default of 32 characters is the maximum characters that can fit on a line, if they're all narrow.
