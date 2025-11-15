@@ -4,9 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"html"
+	"strings"
 
 	"github.com/caarlos0/env/v11"
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/muesli/reflow/wordwrap"
 	miniflux "miniflux.app/v2/client"
 )
 
@@ -46,41 +48,42 @@ func splitLines(s string) []string {
 	return lines
 }
 
+func lineFilter(s string) bool {
+	// This returns false for lines with stuff we don't want to print, like
+	// "Read more of this story at Slashdot"
+	if strings.Contains(s, "Read more of this story at") {
+		return false
+	}
+	return true
+}
+
 func formatForThermalPrinter(s string, lineLength int) string {
-
-	// Strip lines that are just whitespace
-	// and trim leading/trailing whitespace
-	lines := []rune{}
-	currentLine := []rune{}
-	for _, r := range s {
-		if r == '\n' {
-			lineStr := string(currentLine)
-			if len(lineStr) > 0 && len(trimWhitespace(lineStr)) > 0 {
-				lines = append(lines, currentLine...)
-				lines = append(lines, '\n')
-			}
-			currentLine = []rune{}
-		} else {
-			currentLine = append(currentLine, r)
-		}
-	}
-	// Add the last line if any
-	lineStr := string(currentLine)
-	if len(lineStr) > 0 && len(trimWhitespace(lineStr)) > 0 {
-		lines = append(lines, currentLine...)
-	}
-	s = string(lines)
-
-	// Wrap lines to the specified length
-	wrappedContent := ""
+	// Filter out lines that are only whitespace
+	var cleaned []string
 	for _, line := range splitLines(s) {
-		for len(line) > lineLength {
-			wrappedContent += line[:lineLength] + "\n"
-			line = line[lineLength:]
+		if len(trimWhitespace(line)) == 0 {
+			continue
 		}
-		wrappedContent += line + "\n"
+		if !lineFilter(line) {
+			continue
+		}
+		cleaned = append(cleaned, line)
 	}
-	return wrappedContent
+
+	var outLines []string
+	for _, line := range cleaned {
+		// Word-wrap without splitting words, respecting rune widths
+		wrapped := wordwrap.String(line, lineLength)
+		// Split the wrapped result back into individual lines
+		for _, wl := range splitLines(wrapped) {
+			outLines = append(outLines, wl)
+		}
+	}
+
+	if len(outLines) == 0 {
+		return ""
+	}
+	return strings.Join(outLines, "\n")
 }
 
 func main() {
