@@ -15,7 +15,8 @@ import (
 type config struct {
 	MinifluxURL string `env:"MINIFLUX_URL"`
 	APIToken    string `env:"MINIFLUX_API_TOKEN"`
-	LineLength  int    `env:"LINE_LENGTH" envDefault:"32"`
+	LineLength  int    `env:"STDOUTFLUX_LINE_LENGTH" envDefault:"32"`
+	MarkRead    bool   `env:"STDOUTFLUX_MARK_READ" envDefault:"false"`
 }
 
 func trimWhitespace(s string) string {
@@ -74,10 +75,6 @@ func formatForThermalPrinter(s string, lineLength int) string {
 	for _, line := range cleaned {
 		// Word-wrap without splitting words, respecting rune widths
 		wrapped := wordwrap.String(line, lineLength)
-		// Split the wrapped result back into individual lines
-		// for _, wl := range splitLines(wrapped) {
-		// 	outLines = append(outLines, wl)
-		// }
 		outLines = append(outLines, splitLines(wrapped)...)
 	}
 
@@ -101,6 +98,7 @@ func main() {
 	minifluxURL := flag.String("url", "", "Miniflux instance URL")
 	apiToken := flag.String("token", "", "API token for Miniflux")
 	lineLength := flag.Int("linelength", 32, "Maximum line length for content wrapping")
+	markRead := flag.Bool("markread", false, "Mark entries as read after fetching")
 	flag.Parse()
 
 	// Make CLI flags override env vars if provided
@@ -113,6 +111,9 @@ func main() {
 	if *lineLength != 32 {
 		cfg.LineLength = *lineLength
 	}
+	if *markRead {
+		cfg.MarkRead = *markRead
+	}
 
 	// Create Miniflux client.
 	client := miniflux.NewClient(cfg.MinifluxURL, cfg.APIToken)
@@ -123,6 +124,8 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
+	readEntries := []int64{}
 	for _, entry := range entries.Entries {
 		fmt.Println("===============")
 		fmt.Println(formatForThermalPrinter(entry.Title, cfg.LineLength))
@@ -131,7 +134,13 @@ func main() {
 		entry.Content = html.UnescapeString(entry.Content)
 		entry.Content = formatForThermalPrinter(entry.Content, cfg.LineLength)
 		fmt.Println(entry.Content)
-		// fmt.Println(content2)
+		readEntries = append(readEntries, entry.ID)
+	}
 
+	if cfg.MarkRead {
+		err = client.UpdateEntries(readEntries, miniflux.EntryStatusRead)
+		if err != nil {
+			fmt.Println("Failed to mark entry as read:", err)
+		}
 	}
 }
